@@ -19,7 +19,7 @@ poetry install -vvv
 
 ## Reference dataset
 
-basing off of the iFlix dataset here (just referencing the data shape)
+loosely basing off of the iFlix dataset here (just referencing the data shape)
 
 https://www.kaggle.com/datasets/aungpyaeap/movie-streaming-datasets-iflix
 

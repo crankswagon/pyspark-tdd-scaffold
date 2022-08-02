@@ -4,11 +4,11 @@ from dataclasses import dataclass
 class BronzeContext:
     
     source_s3_bucket: str = f"s3://somelanding-bucket"
-    destination_database_name: str = "iflix_bronze"
-    destination_table_name: str = "player"
-    destination_s3_bucket : str = f"s3://very-secure-bucket/player/data"
-    checkpoint: str = f"s3://very-secure-bucket/player/checkpoint"
-    schema: str = f"s3://very-secure-bucket/player/schema"
+    destination_database: str = "iflix_bronze"
+    destination_table: str = "player"
+    destination_s3_bucket : str = f"s3://very-secure-bronze-bucket/player/data"
+    checkpoint: str = f"s3://very-secure-bronze-bucket/player/checkpoint"
+    schema: str = f"s3://very-secure-bronze-bucket/player/schema"
     
     def __post_init__(self):
         print(self)
@@ -16,11 +16,14 @@ class BronzeContext:
 class AutoLoad:
     @staticmethod
     def micorbatch_ops(_mdf, _batch_id, ctx: BronzeContext):
+        """ repartitioning should also happen in this function
+        """
         (_mdf.write.format('delta')
                    .mode('append')
                    .option('path', ctx.destination_s3_bucket)
-                   .saveAsTable(f'{ctx.destination_database_name}.{ctx.destination_table_name}')
+                   .saveAsTable(f'{ctx.destination_database}.{ctx.destination_table}')
         )
+    
     @staticmethod
     def ReadSource(_spark, ctx: BronzeContext):
         """
@@ -42,7 +45,8 @@ class AutoLoad:
                 .option('cloudFiles.schemaEvolutionMode', 'addNewColumns')
                 .load(ctx.source_s3_bucket)
                 )  
-                  
+    
+    @staticmethod          
     def WriteData(source_stream, ctx: BronzeContext):
         _write = (source_stream.writeStream
                                .option('checkpointLocation', ctx.checkpoint)
@@ -50,12 +54,11 @@ class AutoLoad:
                 )
 
         _query = _write.trigger(once=True).start()
-        _query.awaitTermination() 
+        _query.awaitTermination()
         
-
 
 if __name__ == '__main__':
     run_context = BronzeContext()
     
     src_stream = AutoLoad.ReadSource(spark, run_context)
-    AutoLoad.WriteData(src_stream)
+    AutoLoad.WriteData(src_stream, run_context)
