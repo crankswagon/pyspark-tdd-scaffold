@@ -22,3 +22,10 @@ poetry install -vvv
 basing off of the iFlix dataset here (just referencing the data shape)
 
 https://www.kaggle.com/datasets/aungpyaeap/movie-streaming-datasets-iflix
+
+
+## Run Tests
+
+```
+poetry run pytest -rx tests/bronze/play_test.py
+```
