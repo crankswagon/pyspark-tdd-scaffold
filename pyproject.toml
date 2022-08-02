@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "pyspark-tdd-scaffold"
+version = "0.1.0"
+description = "opinionated example project demonstrating test driven pyspark development"
+authors = ["Jay Jiang <48189996+crankswagon@users.noreply.github.com>"]
+license = "WTFPL"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.dev-dependencies]
+pyspark = "^3.2.0"
+delta-spark = "^1.2.0"
+pytest = "^7.1.2"
+chispa = "^0.9.2"
+moto = "^3.1.16"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
