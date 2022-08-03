@@ -23,10 +23,11 @@ each sub directory contains an `__init__.py`, which configures them as packages 
     ├── bronze
     │   └── *_test.py    
     ├── silver 
-    │   └── *_test.py        
-    └── gold
-        └── *_test.py    
-
+    │   └── *_test.py
+    ├── gold 
+    │   └── *_test.py          
+    └── pipeline
+        └── *_integration_test.py    
 
 ```
 ## Considerations
