@@ -73,8 +73,10 @@ class Transformations:
                 ) 
     
     @staticmethod          
-    def WriteData(_spark, source_stream, ctx: SilverContext):
-        _write = (source_stream.writeStream
+    def PropagateData(_spark, ctx: SilverContext):
+
+        _source_stream = Transformations.ReadSource(_spark, ctx)
+        _write = (_source_stream.writeStream
                                .option('checkpointLocation', ctx.checkpoint)
                                .foreachBatch(lambda mdf, batch_id: Transformations.delta_upsert(_spark, mdf, batch_id, ctx))
                 )
@@ -87,5 +89,4 @@ class Transformations:
 if __name__ == '__main__':
     run_context = SilverContext()
     
-    src_stream = Transformations.ReadSource(spark, run_context)
-    Transformations.WriteData(spark, src_stream, run_context)
+    Transformations.PropagateData(spark, run_context)

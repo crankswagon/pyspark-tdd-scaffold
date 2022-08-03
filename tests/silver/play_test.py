@@ -69,8 +69,7 @@ def test_source_data_init(spark, silver_context: SilverContext):
 
 def test_silver_stream(spark, silver_context: SilverContext):
     
-    _ = Transformations.ReadSource(spark, silver_context)
-    Transformations.WriteData(spark, _, silver_context)
+    Transformations.PropagateData(spark, silver_context)
     tar_tbl =  spark.sql(f'select * from {silver_context.destination_database}.{silver_context.destination_table}')
     
     assert tar_tbl.count() == 2
@@ -99,8 +98,7 @@ def test_dupes_do_not_propagate(spark, silver_context: SilverContext):
                     ,"4f026c60-3716-417d-bee7-943a716648bb"
                 )
             """)
-    _ = Transformations.ReadSource(spark, silver_context)
-    Transformations.WriteData(spark, _, silver_context)
+    Transformations.PropagateData(spark, silver_context)
 
     src = spark.sql(f'select * from {silver_context.source_database}.{silver_context.source_table}')
     tar = spark.sql(f'select * from {silver_context.destination_database}.{silver_context.destination_table}')
@@ -115,8 +113,7 @@ def test_seconds_conversion(spark, silver_context: SilverContext):
                                     union
                               select 420 as seconds_viewed
                           """)
-    _ = Transformations.ReadSource(spark, silver_context)
-    Transformations.WriteData(spark, _, silver_context)
+    Transformations.PropagateData(spark, silver_context)
 
     actual = spark.sql(f'select seconds_viewed from {silver_context.destination_database}.{silver_context.destination_table}')
 

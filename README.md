@@ -7,6 +7,9 @@ we are using a deltalake [medallion architecture](https://databricks.com/it/glos
 
 each sub directory contains an `__init__.py`, which configures them as packages to facilitate importing and [test scope isolation](https://docs.pytest.org/en/7.1.x/how-to/fixtures.html)
 
+`deltalake` contains the processing code
+`tests` contains the tests
+
 ```
 .
 ├── deltalake
