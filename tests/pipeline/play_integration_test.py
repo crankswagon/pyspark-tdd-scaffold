@@ -5,7 +5,7 @@ from deltalake.silver.play import SilverContext, Transformations, MetastoreOps
 import pytest
 import json
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def mock_source_data(tmp_path_factory):
     _tmp_dir = tmp_path_factory.mktemp('landing')
     _seed_data = [{"user_id": "764504178919"
@@ -26,7 +26,7 @@ def mock_source_data(tmp_path_factory):
         f.write('\n'.join([json.dumps(_) for _ in _seed_data]))
     return f'{_tmp_dir}'
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def bronze_context(tmp_path_factory, mock_source_data):
     _tmp_dir = tmp_path_factory.mktemp('bronze')
     _ctx = BronzeContext(destination_s3_bucket= f'{_tmp_dir}/data'
@@ -35,7 +35,7 @@ def bronze_context(tmp_path_factory, mock_source_data):
                         ,checkpoint = f'{_tmp_dir}/checkpoint')
     return _ctx
     
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def silver_context(tmp_path_factory):
     _tmp_dir = tmp_path_factory.mktemp('silver')
     _ctx = SilverContext(destination_s3_bucket= f'{_tmp_dir}/data'
@@ -44,7 +44,7 @@ def silver_context(tmp_path_factory):
     return _ctx
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="module", autouse=True)
 def setup_db(spark, bronze_context: BronzeContext, silver_context: SilverContext):
     spark.sql(f'CREATE DATABASE IF NOT EXISTS {bronze_context.destination_database}')
     spark.sql(f'CREATE DATABASE IF NOT EXISTS {silver_context.destination_database}')
@@ -58,7 +58,7 @@ def setup_db(spark, bronze_context: BronzeContext, silver_context: SilverContext
     spark.sql(f'DROP DATABASE IF EXISTS {bronze_context.destination_database}')
     spark.sql(f'DROP DATABASE IF EXISTS {silver_context.destination_database}')
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="module")
 def infer_bronze_schema(spark, bronze_context: BronzeContext):
     """
     without autoloader, we cannot use `readStream` without definine a schema, so this is a hack to automatically generate the schema

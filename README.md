@@ -45,7 +45,7 @@ each sub directory contains an `__init__.py`, which configures them as packages 
 *repo should be logically laid out so that pipeline can be validated end-to-end by `integration tests`*
 
 - easy for reviewers to rule out any regression in functionality
-- pytest `fixture` scopes should be set to `session`
+- pytest `fixture` scopes should be set to `module`
   
 ## Environment management
 
