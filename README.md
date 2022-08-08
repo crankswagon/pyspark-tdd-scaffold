@@ -19,15 +19,14 @@ each sub directory contains an `__init__.py`, which configures them as packages 
 │   │   └── *.py
 │   └── gold
 │   │   └── *.py
-└── tests
-    ├── bronze
-    │   └── *_test.py    
-    ├── silver 
-    │   └── *_test.py
-    ├── gold 
-    │   └── *_test.py          
-    └── pipeline
-        └── *_integration_test.py    
+├── tests
+│   ├── bronze
+│   │   └── *_test.py    
+│   ├── silver 
+│   │   └── *_test.py
+│   ├── gold 
+│       └── *_test.py          
+└── integration    
 
 ```
 ## Considerations
