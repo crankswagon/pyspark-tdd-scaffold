@@ -15,7 +15,7 @@ class BronzeContext:
 
 class AutoLoad:
     @staticmethod
-    def micorbatch_ops(_mdf, _batch_id, ctx: BronzeContext):
+    def microbatch_ops(_mdf, _batch_id, ctx: BronzeContext):
         """ repartitioning should also happen in this function
         """
         (_mdf.write.format('delta')
